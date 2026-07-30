@@ -3,6 +3,8 @@
 A privacy-first, Chrome MV3 extension + FastAPI backend system that observes browsing activity, captures compressed screenshots, and uses **GPT-4o mini via GitHub Models** to generate AI-powered page summaries. Includes a full-featured Coffee Theme dashboard for reviewing sessions, screenshots, and AI insights.
 
 ---
+<img width="1882" height="1007" alt="Screenshot 2026-07-30 233851" src="https://github.com/user-attachments/assets/432ccb99-68d3-4cbf-9b5d-70691850d364" />
+<img width="1867" height="992" alt="Screenshot 2026-07-30 233823" src="https://github.com/user-attachments/assets/2692c8a4-8729-40b6-a4a5-c8d047f7e351" />
 
 ## Architecture
 
