@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.routers import events, screenshots
+from app.middleware.rate_limit import RateLimitMiddleware
+from app.routers import events, screenshots, activity, privacy, data_rights
 
 app = FastAPI(
     title="Visual AI Agent Backend API",
-    description="Backend service for Chrome extension visual activity logging, Gemini 2.5 Flash vision analysis, and privacy controls.",
+    description="Backend service for Chrome extension visual activity logging, Gemini 2.5 Flash vision analysis, timeline queries, privacy governance, and user data rights.",
     version="1.0.0"
 )
 
@@ -19,9 +20,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Ingestion rate limiting middleware
+app.add_middleware(RateLimitMiddleware, max_requests=120, window_seconds=60)
+
 # Register routers
 app.include_router(events.router)
 app.include_router(screenshots.router)
+app.include_router(activity.router)
+app.include_router(privacy.router)
+app.include_router(data_rights.router)
 
 @app.get("/api/v1/health", tags=["Health Check"])
 async def health_check():
