@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Visual AI Agent</title>
+  <style>
+    :root {
+      --color-espresso: #2E1D14;
+      --color-mocha: #5C3D2E;
+      --color-caramel: #B87A4A;
+      --color-latte: #F1E4D3;
+      --color-cream: #FBF6EF;
+      --color-matcha: #7A8B6F;
+    }
+    body {
+      width: 320px;
+      margin: 0;
+      padding: 16px;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background-color: var(--color-cream);
+      color: var(--color-espresso);
+      box-sizing: border-box;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(92, 61, 46, 0.15);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .header h1 {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0;
+      color: var(--color-espresso);
+    }
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-matcha);
+      background: rgba(122, 139, 111, 0.15);
+      padding: 4px 8px;
+      border-radius: 999px;
+    }
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--color-matcha);
+    }
+    .card {
+      background-color: var(--color-latte);
+      border: 1px solid rgba(92, 61, 46, 0.1);
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+    .card-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-mocha);
+      margin: 0 0 6px 0;
+      font-weight: 600;
+    }
+    .card-body {
+      font-size: 13px;
+      line-height: 1.4;
+      margin: 0;
+    }
+    .btn-pill {
+      display: inline-block;
+      width: 100%;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: none;
+      background-color: var(--color-mocha);
+      color: var(--color-cream);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      text-align: center;
+      transition: background-color 0.2s ease;
+    }
+    .btn-pill:hover {
+      background-color: var(--color-espresso);
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Visual AI Agent</h1>
+    <div class="status-badge">
+      <span class="status-dot"></span> Ready
+    </div>
+  </div>
+
+  <div class="card">
+    <p class="card-title">Phase 1 Skeleton</p>
+    <p class="card-body">Extension loaded cleanly with Manifest V3 and background service worker wired.</p>
+  </div>
+
+  <button id="toggle-btn" class="btn-pill">Pause Agent</button>
+
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>
