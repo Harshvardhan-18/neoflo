@@ -1,5 +1,6 @@
 import logging
 import uuid
+from app.config import settings
 from app.database import async_session_maker
 from app.models import AISummary
 from app.services.vision import analyze_screenshot_with_gemini
@@ -27,7 +28,7 @@ async def process_screenshot_summary_background(
       ai_summary = AISummary(
           id=uuid.uuid4(),
           screenshot_id=screenshot_id,
-          model="gemini-2.5-flash",
+          model=settings.VISION_MODEL,
           summary_text=analysis.get("summary", ""),
           tags={
               "activity_type": analysis.get("activity_type"),
@@ -39,7 +40,7 @@ async def process_screenshot_summary_background(
 
       db.add(ai_summary)
       await db.commit()
-      logger.info(f"Persisted AI summary for screenshot {screenshot_id} (model: gemini-2.5-flash).")
+      logger.info(f"Persisted AI summary for screenshot {screenshot_id} (model: {settings.VISION_MODEL}).")
 
   except Exception as err:
     logger.error(f"Error in background AI vision processing for screenshot {screenshot_id}: {err}", exc_info=True)

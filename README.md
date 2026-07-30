@@ -1,6 +1,6 @@
 # Visual AI Agent
 
-A privacy-first, Chrome MV3 extension + FastAPI backend system that observes browsing activity, captures compressed screenshots, and uses **Gemini 2.5 Flash Vision** to generate AI-powered page summaries. Includes a full-featured Coffee Theme dashboard for reviewing sessions, screenshots, and AI insights.
+A privacy-first, Chrome MV3 extension + FastAPI backend system that observes browsing activity, captures compressed screenshots, and uses **GPT-4o mini via GitHub Models** to generate AI-powered page summaries. Includes a full-featured Coffee Theme dashboard for reviewing sessions, screenshots, and AI insights.
 
 ---
 
@@ -23,7 +23,7 @@ Chrome Extension (MV3, TypeScript + Vite)
 FastAPI Backend (Python, asyncpg + asyncio)
   │
   ├── POST /api/v1/events/batch        (event ingestion)
-  ├── POST /api/v1/screenshots         (screenshot upload → Gemini)
+  ├── POST /api/v1/screenshots         (screenshot upload → GPT-4o mini)
   ├── GET  /api/v1/activity/timeline   (timeline + filters)
   ├── GET/POST/DELETE /api/v1/privacy/rules
   ├── POST /api/v1/data/export         (GDPR-style export)
@@ -31,7 +31,7 @@ FastAPI Backend (Python, asyncpg + asyncio)
   └── POST /api/v1/admin/retention/purge
         │
         ├── PostgreSQL 16 (via Docker, port 5433)
-        └── Google Gemini 2.5 Flash Vision (google-genai SDK)
+        └── GPT-4o mini via GitHub Models (openai SDK, Azure inference endpoint)
 
 Dashboard (React + Vite, Coffee Theme)
   └── Activity Timeline, Screenshot Gallery, Session Replay Scrubber
@@ -45,7 +45,7 @@ Dashboard (React + Vite, Coffee Theme)
 |---|---|
 | Extension | Chrome MV3, TypeScript, Vite 5, `@crxjs/vite-plugin`, `idb` |
 | Backend | Python 3.13, FastAPI, asyncpg, SQLAlchemy (async), Alembic, Pydantic |
-| AI Vision | `google-genai` SDK, `gemini-2.5-flash` model |
+| AI Vision | `openai` SDK, `gpt-4o-mini` via GitHub Models (`models.inference.ai.azure.com`) |
 | Database | PostgreSQL 16 (Docker) |
 | Dashboard | React 18, Vite, TypeScript |
 
@@ -64,9 +64,10 @@ neoflo/
 │   │   ├── dependencies/
 │   │   ├── middleware/
 │   │   ├── routers/         # events, screenshots, activity, privacy, data_rights, admin
-│   │   └── services/        # vision.py (Gemini), processor.py, retention.py
+│   │   └── services/        # vision.py (GPT-4o mini), processor.py, retention.py
 │   ├── alembic/
 │   ├── tests/
+│   ├── .env.example
 │   └── requirements.txt
 ├── extension/               # Chrome MV3 extension
 │   ├── src/
@@ -100,7 +101,7 @@ neoflo/
 - Docker Desktop (for PostgreSQL)
 - Node.js 20+
 - Python 3.13+
-- A Google Gemini API key (`GEMINI_API_KEY`)
+- A GitHub Personal Access Token (for GPT-4o mini via GitHub Models)
 
 ### 1. Start PostgreSQL
 
@@ -122,7 +123,7 @@ pip install -r requirements.txt
 
 # Copy and configure environment
 cp .env.example .env
-# Edit .env: set DATABASE_URL, GEMINI_API_KEY
+# Edit .env: set GITHUB_TOKEN (and optionally VISION_MODEL)
 
 # Run database migrations
 alembic upgrade head
@@ -190,7 +191,7 @@ Enter your extension's `install_id` (from `chrome.storage.local`) in the dashboa
 | Method | Endpoint | Description |
 |---|---|---|
 | `POST` | `/api/v1/events/batch` | Ingest batch browsing events |
-| `POST` | `/api/v1/screenshots` | Upload screenshot for Gemini processing |
+| `POST` | `/api/v1/screenshots` | Upload screenshot for GPT-4o mini processing |
 | `GET` | `/api/v1/activity/timeline` | Paginated activity timeline with filters |
 | `GET` | `/api/v1/privacy/rules` | List privacy rules |
 | `POST` | `/api/v1/privacy/rules` | Add domain block/allow rule |
@@ -219,9 +220,13 @@ Expected: **12 tests passed**.
 | Variable | Description | Example |
 |---|---|---|
 | `DATABASE_URL` | asyncpg PostgreSQL connection URL | `postgresql+asyncpg://user:pass@localhost:5433/neoflo` |
-| `GEMINI_API_KEY` | Google Gemini API key for vision analysis | `AIzaSy...` |
+| `GITHUB_TOKEN` | GitHub Personal Access Token for GPT-4o mini via GitHub Models | `ghp_abc123...` |
+| `GITHUB_MODELS_BASE_URL` | GitHub Models inference endpoint (do not change) | `https://models.inference.ai.azure.com` |
+| `VISION_MODEL` | Vision model served via GitHub Models | `gpt-4o-mini` |
 | `ENVIRONMENT` | Runtime environment | `development` |
-| `CORS_ORIGINS` | Allowed CORS origins (JSON list) | `["http://localhost:5173"]` |
+| `ALLOWED_ORIGINS` | Allowed CORS origins (comma-separated) | `chrome-extension://*,http://localhost:5173` |
+
+> **Getting a GitHub Token**: Go to [github.com/settings/tokens](https://github.com/settings/tokens) → Generate new token (classic). No special scopes are required — any authenticated GitHub user has access to GitHub Models.
 
 ---
 
@@ -230,7 +235,7 @@ Expected: **12 tests passed**.
 - Phase 1: Project foundation & architecture (monorepo, Docker, FastAPI, Alembic, MV3 scaffold)
 - Phase 2: Core activity tracking engine (privacy gate, IndexedDB buffer, session lifecycle)
 - Phase 3: Visual capture pipeline (OffscreenCanvas downscaling, MutationObserver burst detection)
-- Phase 4: Gemini 2.5 Flash Vision AI analysis layer (structured JSON output, exponential backoff)
+- Phase 4: GPT-4o mini Vision AI analysis layer via GitHub Models (structured JSON output, exponential backoff)
 - Phase 5: Backend API & data layer hardening (auth, rate limiting, timeline, privacy rules, data rights)
 - Phase 6: Extension UI — Coffee Theme (consent screen, popup, options page)
 - Phase 7: Dashboard, data retention, extension packaging, v1.0.0 release

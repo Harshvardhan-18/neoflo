@@ -18,6 +18,7 @@ interface Screenshot {
   domain: string
   tab_title?: string
   captured_at: string
+  data_url?: string
   image_data_b64?: string
   summaries: AISummary[]
 }
@@ -199,7 +200,7 @@ export default function App() {
           <div>
             <h1 className="page-title">Activity Dashboard</h1>
             <div style={{ fontSize: 12, color: 'var(--color-mocha)', marginTop: 4 }}>
-              Browsing activity & Gemini 2.5 Flash AI analysis
+              Browsing activity & GPT-4o mini AI analysis
             </div>
           </div>
           <button className="btn btn-secondary btn-sm" onClick={() => fetchTimeline(page)}>
@@ -358,7 +359,7 @@ export default function App() {
                               </div>
                             ))}
                           </div>
-                          {/* Session Replay Scrubber */}
+                              {/* Session Replay Scrubber */}
                           {session.screenshots.length > 1 && (
                             <div style={{ marginTop: 14 }}>
                               <div className="card-title" style={{ marginBottom: 10 }}>
@@ -366,15 +367,23 @@ export default function App() {
                               </div>
                               <div className="replay-scrubber">
                                 <div className="replay-image-area">
-                                  <div style={{ color: 'var(--color-caramel)', textAlign: 'center', padding: 20 }}>
-                                    <div style={{ fontSize: 48 }}>📷</div>
-                                    <div style={{ marginTop: 10, fontSize: 12 }}>
-                                      Frame {replayIndex + 1} / {session.screenshots.length}
+                                  {session.screenshots[replayIndex]?.data_url ? (
+                                    <img
+                                      src={session.screenshots[replayIndex].data_url!}
+                                      alt={`Frame ${replayIndex + 1}`}
+                                      style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 6 }}
+                                    />
+                                  ) : (
+                                    <div style={{ color: 'var(--color-caramel)', textAlign: 'center', padding: 20 }}>
+                                      <div style={{ fontSize: 48 }}>📷</div>
+                                      <div style={{ marginTop: 10, fontSize: 12 }}>
+                                        Frame {replayIndex + 1} / {session.screenshots.length}
+                                      </div>
+                                      <div style={{ fontSize: 11, opacity: 0.6, marginTop: 4 }}>
+                                        {session.screenshots[replayIndex]?.domain} · {fmtTime(session.screenshots[replayIndex]?.captured_at)}
+                                      </div>
                                     </div>
-                                    <div style={{ fontSize: 11, opacity: 0.6, marginTop: 4 }}>
-                                      {session.screenshots[replayIndex]?.domain} · {fmtTime(session.screenshots[replayIndex]?.captured_at)}
-                                    </div>
-                                  </div>
+                                  )}
                                 </div>
                                 <div className="replay-controls">
                                   <button className="btn btn-secondary btn-sm" onClick={() => setReplayIndex(i => Math.max(0, i - 1))} disabled={replayIndex === 0}>‹ Prev</button>
@@ -390,7 +399,7 @@ export default function App() {
                                 </div>
                                 {session.screenshots[replayIndex]?.summaries[0] && (
                                   <div className="replay-summary">
-                                    <span style={{ fontWeight: 700, color: 'var(--color-mocha)' }}>🤖 Gemini:</span>{' '}
+                                    <span style={{ fontWeight: 700, color: 'var(--color-mocha)' }}>🤖 GPT-4o mini:</span>{' '}
                                     {session.screenshots[replayIndex].summaries[0].summary_text}
                                   </div>
                                 )}
@@ -430,12 +439,20 @@ export default function App() {
               <div className="screenshot-grid">
                 {allScreenshots.map((sc) => (
                   <div key={sc.id} className="screenshot-thumb" onClick={() => setReplayScreenshot(sc)}>
-                    <div style={{
-                      width: '100%', height: 120,
-                      background: 'var(--color-espresso)',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      color: 'var(--color-caramel)', fontSize: 32
-                    }}>📷</div>
+                    {sc.data_url ? (
+                      <img
+                        src={sc.data_url}
+                        alt={sc.domain}
+                        style={{ width: '100%', height: 120, objectFit: 'cover', borderRadius: '6px 6px 0 0' }}
+                      />
+                    ) : (
+                      <div style={{
+                        width: '100%', height: 120,
+                        background: 'var(--color-espresso)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        color: 'var(--color-caramel)', fontSize: 32
+                      }}>📷</div>
+                    )}
                     <div className="screenshot-thumb-meta">
                       <div style={{ fontWeight: 600, marginBottom: 2 }}>{sc.domain}</div>
                       <div style={{ fontSize: 10 }}>{fmtDate(sc.captured_at)} · {fmtTime(sc.captured_at)}</div>
@@ -465,17 +482,25 @@ export default function App() {
             </div>
 
             <div className="replay-image-area" style={{ marginBottom: 16, minHeight: 240 }}>
-              <div style={{ textAlign: 'center', padding: 32, color: 'var(--color-caramel)' }}>
-                <div style={{ fontSize: 56 }}>📷</div>
-                <div style={{ marginTop: 10, fontSize: 13 }}>Screenshot data stored server-side</div>
-              </div>
+              {replayScreenshot.data_url ? (
+                <img
+                  src={replayScreenshot.data_url}
+                  alt={replayScreenshot.domain}
+                  style={{ width: '100%', maxHeight: 400, objectFit: 'contain', borderRadius: 6 }}
+                />
+              ) : (
+                <div style={{ textAlign: 'center', padding: 32, color: 'var(--color-caramel)' }}>
+                  <div style={{ fontSize: 56 }}>📷</div>
+                  <div style={{ marginTop: 10, fontSize: 13 }}>Screenshot data not available</div>
+                </div>
+              )}
             </div>
 
             {replayScreenshot.summaries.length > 0 ? (
               replayScreenshot.summaries.map((s) => (
                 <div key={s.id} className="replay-summary" style={{ marginBottom: 10 }}>
                   <div style={{ fontWeight: 700, marginBottom: 6, color: 'var(--color-mocha)' }}>
-                    🤖 Gemini 2.5 Flash Analysis
+                    🤖 GPT-4o mini Analysis
                     {s.page_title && <span style={{ fontWeight: 400, fontSize: 11, marginLeft: 8 }}>· {s.page_title}</span>}
                   </div>
                   <p style={{ margin: 0 }}>{s.summary_text}</p>

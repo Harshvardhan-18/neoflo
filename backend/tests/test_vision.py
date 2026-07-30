@@ -1,5 +1,6 @@
 import pytest
 import uuid
+from unittest.mock import patch, AsyncMock
 from fastapi.testclient import TestClient
 from sqlalchemy import select
 from app.main import app
@@ -39,7 +40,7 @@ def test_screenshot_upload_endpoint():
 
 @pytest.mark.asyncio
 async def test_vision_processor_db_persistence():
-    await engine.dispose() # Clear pooled connections across loops
+    await engine.dispose()  # Clear pooled connections across loops
 
     session_id = uuid.uuid4()
     screenshot_id = uuid.uuid4()
@@ -56,23 +57,34 @@ async def test_vision_processor_db_persistence():
         ))
         await db.commit()
 
-    # Process background vision summary
-    await process_screenshot_summary_background(
-        screenshot_id=screenshot_id,
-        data_url=TEST_JPEG_DATA_URL,
-        domain="example.com",
-        url="https://example.com"
-    )
+    # Mock the vision API call so the test is network-free and always succeeds
+    mock_analysis = {
+        "activity_type": "browsing",
+        "summary": "User is viewing example.com for testing purposes.",
+        "detected_ui_elements": ["header", "main"],
+        "tags": ["test", "example"],
+        "confidence": 0.95,
+    }
+    with patch(
+        "app.services.processor.analyze_screenshot_with_gemini",
+        new=AsyncMock(return_value=mock_analysis),
+    ):
+        await process_screenshot_summary_background(
+            screenshot_id=screenshot_id,
+            data_url=TEST_JPEG_DATA_URL,
+            domain="example.com",
+            url="https://example.com",
+        )
 
-    # Verify AI Summary row created in Postgres
+    # Verify AI Summary row was persisted to Postgres
     async with async_session_maker() as db:
         stmt = select(AISummary).where(AISummary.screenshot_id == screenshot_id)
         result = await db.execute(stmt)
         summary = result.scalar_one_or_none()
 
         assert summary is not None
-        assert summary.model == "gemini-2.5-flash"
-        assert summary.summary_text != ""
+        assert summary.model == "gpt-4o-mini"
+        assert summary.summary_text == mock_analysis["summary"]
         assert "activity_type" in summary.tags
 
     await engine.dispose()

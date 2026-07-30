@@ -45,13 +45,14 @@ async def upload_screenshot(
         session_id=payload.session_id,
         event_id=payload.event_id,
         storage_path=storage_path,
+        data_url=payload.data_url,
         domain=payload.domain,
         captured_at=payload.captured_at
     )
     db.add(screenshot)
     await db.commit()
 
-    # 3. Schedule asynchronous Gemini 2.5 Flash vision analysis background task
+    # 3. Schedule asynchronous GPT-4o mini vision analysis background task
     background_tasks.add_task(
         process_screenshot_summary_background,
         screenshot_id=payload.id,

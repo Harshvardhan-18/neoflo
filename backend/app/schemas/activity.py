@@ -14,6 +14,7 @@ class AISummaryItem(BaseModel):
 class ScreenshotItem(BaseModel):
     id: UUID
     storage_path: str
+    data_url: Optional[str] = None
     domain: str
     captured_at: datetime
     summaries: List[AISummaryItem] = []

@@ -8,5 +8,6 @@ alembic>=1.13.1
 pydantic>=2.6.4
 pydantic-settings>=2.2.1
 python-dotenv>=1.0.1
-google-genai>=0.1.1
+# OpenAI SDK — used for GitHub Models (GPT-4o mini) via custom base_url
+openai>=1.30.0
 pytest>=9.0.0

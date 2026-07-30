@@ -90,6 +90,7 @@ async def get_activity_timeline(
             ScreenshotItem(
                 id=sc.id,
                 storage_path=sc.storage_path,
+                data_url=sc.data_url,
                 domain=sc.domain,
                 captured_at=sc.captured_at,
                 summaries=[

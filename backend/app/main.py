@@ -6,7 +6,7 @@ from app.routers import events, screenshots, activity, privacy, data_rights, adm
 
 app = FastAPI(
     title="Visual AI Agent Backend API",
-    description="Backend service for Chrome extension visual activity logging, Gemini 2.5 Flash vision analysis, timeline queries, privacy governance, and user data rights.",
+    description="Backend service for Chrome extension visual activity logging, GPT-4o mini vision analysis via GitHub Models, timeline queries, privacy governance, and user data rights.",
     version="1.0.0"
 )
 

@@ -50,6 +50,7 @@ class Screenshot(Base):
     session_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("sessions.id", ondelete="CASCADE"), nullable=False)
     event_id: Mapped[Optional[uuid.UUID]] = mapped_column(UUID(as_uuid=True), ForeignKey("events.id", ondelete="SET NULL"), nullable=True)
     storage_path: Mapped[str] = mapped_column(Text, nullable=False)
+    data_url: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # base64 data URL for dashboard display
     domain: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
     captured_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utc_now, nullable=False)
 
