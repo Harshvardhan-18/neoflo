@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy & Consent Disclosure — Visual AI Agent</title>
+  <link rel="stylesheet" href="../styles/theme.css">
+  <style>
+    .consent-container {
+      max-width: 680px;
+      margin: 40px auto 100px auto;
+      padding: 0 20px;
+    }
+    .hero-title {
+      font-size: 28px;
+      font-family: var(--font-heading);
+      color: var(--color-espresso);
+      margin-bottom: 10px;
+    }
+    .sub-title {
+      font-size: 15px;
+      color: var(--color-mocha);
+      margin-bottom: 30px;
+    }
+    .disclosure-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .disclosure-card {
+      background-color: var(--color-latte);
+      border: 1px solid var(--color-border);
+      border-radius: 12px;
+      padding: 18px;
+    }
+    .disclosure-card h3 {
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+    .disclosure-card ul {
+      margin: 0;
+      padding-left: 18px;
+      font-size: 13px;
+    }
+    .disclosure-card li {
+      margin-bottom: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div class="consent-container">
+    <h1 class="hero-title">Visual AI Agent — Privacy Disclosure</h1>
+    <p class="sub-title">Please review how your browsing activity and visual data will be collected and processed before enabling tracking.</p>
+
+    <div class="disclosure-grid">
+      <div class="disclosure-card">
+        <h3>What is Collected</h3>
+        <ul>
+          <li><strong>Browsing Events:</strong> Navigation URLs, click element tags & coarse CSS selectors, scroll depth milestones.</li>
+          <li><strong>Visual Captures:</strong> Downscaled page screenshots processed server-side by Gemini 2.5 Flash Vision.</li>
+          <li><strong>Session Identifiers:</strong> Anonymous per-install ID.</li>
+        </ul>
+      </div>
+
+      <div class="disclosure-card">
+        <h3>Privacy Safeguards</h3>
+        <ul>
+          <li><strong>No Form Values:</strong> Input values, passwords, and autofill fields are NEVER captured.</li>
+          <li><strong>Domain Blocklist:</strong> Financial, medical, and credential portals are skipped automatically.</li>
+          <li><strong>Local-First Control:</strong> One-click pause and instant data purge from Settings.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <p class="card-title">Data Rights & Ownership</p>
+      <p>Your data belongs to you. You can inspect active blocklist rules, download a JSON export of your sessions, or execute a permanent data deletion at any time in the <a href="#" id="open-settings-link">Extension Options Page</a>.</p>
+    </div>
+  </div>
+
+  <!-- Sticky Bottom Compliance Banner -->
+  <div class="sticky-banner">
+    <div>
+      <strong>Consent Required</strong> — Tracking is disabled by default.
+    </div>
+    <div style="display: flex; gap: 12px;">
+      <button id="decline-btn" class="btn-pill btn-secondary">Decline & Keep Disabled</button>
+      <button id="accept-btn" class="btn-pill">Accept & Enable Tracking</button>
+    </div>
+  </div>
+
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

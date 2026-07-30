@@ -17,9 +17,6 @@ export const SEED_BLOCKED_DOMAINS = [
   'okta.com'
 ];
 
-/**
- * Extracts clean domain hostname from a full URL or hostname string.
- */
 export function extractDomain(urlOrHostname: string): string {
   try {
     if (!urlOrHostname) return '';
@@ -33,12 +30,8 @@ export function extractDomain(urlOrHostname: string): string {
   }
 }
 
-/**
- * Checks if a hostname matches any blocked domain or sub-domain.
- * e.g. "sub.chase.com" matches "chase.com".
- */
 export function matchesDomainList(hostname: string, domainList: string[]): boolean {
-  if (!hostname) return true; // Internal or invalid URLs treated as blocked for safety
+  if (!hostname) return true;
   const cleanHost = hostname.toLowerCase();
 
   return domainList.some((blocked) => {
@@ -49,7 +42,8 @@ export function matchesDomainList(hostname: string, domainList: string[]): boole
 }
 
 /**
- * Main privacy gate check. Must be evaluated BEFORE taking any action (events or screenshots).
+ * Main privacy gate check.
+ * Strictly checks consent status (`has_consented`), seed blocklist, custom storage rules, and pause status.
  */
 export async function isDomainBlocked(urlOrHostname: string): Promise<boolean> {
   const domain = extractDomain(urlOrHostname);
@@ -59,26 +53,33 @@ export async function isDomainBlocked(urlOrHostname: string): Promise<boolean> {
     return true;
   }
 
-  // 1. Check seed blocklist
-  if (matchesDomainList(domain, SEED_BLOCKED_DOMAINS)) {
-    return true;
-  }
-
-  // 2. Check user custom blocklist from storage
+  // Check consent, pause status, and custom blocklist from storage
   try {
-    const storage = await chrome.storage.local.get(['blocklist_custom', 'is_paused']);
+    const storage = await chrome.storage.local.get(['has_consented', 'is_paused', 'blocklist_custom']);
     
-    // Global pause toggle check
+    // 1. Consent Gate: Fail closed if user has not explicitly consented
+    if (storage.has_consented !== true) {
+      return true;
+    }
+
+    // 2. Global pause toggle check
     if (storage.is_paused === true) {
       return true;
     }
 
+    // 3. Seed blocklist check
+    if (matchesDomainList(domain, SEED_BLOCKED_DOMAINS)) {
+      return true;
+    }
+
+    // 4. Custom blocklist check
     const customList: string[] = storage.blocklist_custom || [];
     if (matchesDomainList(domain, customList)) {
       return true;
     }
   } catch (err) {
     console.warn('[Visual AI Agent Privacy] Failed reading chrome.storage.local:', err);
+    return true; // Fail closed on error
   }
 
   return false;

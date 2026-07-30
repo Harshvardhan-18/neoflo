@@ -1,0 +1,153 @@
+:root {
+  --color-espresso: #2E1D14;
+  --color-mocha: #5C3D2E;
+  --color-caramel: #B87A4A;
+  --color-latte: #F1E4D3;
+  --color-cream: #FBF6EF;
+  --color-matcha: #7A8B6F;
+  --color-border: rgba(92, 61, 46, 0.15);
+  --color-danger: #9E3A34;
+  --font-heading: 'Lora', 'Georgia', serif;
+  --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  background-color: var(--color-cream);
+  color: var(--color-espresso);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+h1, h2, h3, h4 {
+  color: var(--color-espresso);
+  font-family: var(--font-heading);
+  margin-top: 0;
+}
+
+a {
+  color: var(--color-caramel);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+/* Accessible focus outlines */
+:focus-visible {
+  outline: 2px solid var(--color-caramel);
+  outline-offset: 2px;
+}
+
+/* Card Component */
+.card {
+  background-color: var(--color-latte);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 4px rgba(46, 29, 20, 0.03);
+}
+
+.card-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-mocha);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+/* Pill Button Component */
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border-radius: 999px;
+  border: none;
+  background-color: var(--color-mocha);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-pill:hover {
+  background-color: var(--color-espresso);
+}
+
+.btn-pill:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  border: 1px solid var(--color-mocha);
+  color: var(--color-mocha);
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-latte);
+  color: var(--color-espresso);
+}
+
+.btn-danger {
+  background-color: var(--color-danger);
+  color: var(--color-cream);
+}
+.btn-danger:hover {
+  background-color: #7D2D28;
+}
+
+/* Status Badge */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-matcha);
+  background: rgba(122, 139, 111, 0.15);
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-matcha);
+}
+
+/* Sticky Compliance Banner */
+.sticky-banner {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--color-mocha);
+  color: var(--color-cream);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 2px solid var(--color-caramel);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}

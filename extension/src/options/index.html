@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings & Privacy Governance — Visual AI Agent</title>
+  <link rel="stylesheet" href="../styles/theme.css">
+  <style>
+    .options-container {
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .header-section {
+      border-bottom: 2px solid var(--color-border);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .blocklist-input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+    .input-text {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--color-border);
+      font-family: var(--font-body);
+      font-size: 14px;
+      background-color: var(--color-cream);
+    }
+    .domain-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .domain-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--color-cream);
+      border: 1px solid var(--color-border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 8px;
+    }
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .danger-zone {
+      border: 1px solid rgba(158, 58, 52, 0.3);
+      background-color: rgba(158, 58, 52, 0.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="options-container">
+    <div class="header-section">
+      <h1>Extension Settings & Privacy Governance</h1>
+      <p style="color: var(--color-mocha); margin: 0;">Manage your domain blocklist, data retention settings, and user data rights.</p>
+    </div>
+
+    <!-- Section 1: Blocklist Manager -->
+    <div class="card">
+      <h2 style="font-size: 18px; margin-bottom: 12px;">Domain Blocklist Management</h2>
+      <p style="font-size: 13px; color: var(--color-mocha); margin-bottom: 16px;">
+        On blocklisted domains: zero DOM events, zero mouse clicks, and zero screenshots are captured.
+      </p>
+
+      <div class="blocklist-input-group">
+        <input type="text" id="new-domain-input" class="input-text" placeholder="Enter domain (e.g. github.com or sub.domain.com)" />
+        <button id="add-domain-btn" class="btn-pill">Add Domain</button>
+      </div>
+
+      <div class="card-title">Custom Blocklisted Domains</div>
+      <ul id="custom-domain-list" class="domain-list">
+        <li style="font-size: 13px; color: var(--color-mocha);">No custom domains added yet.</li>
+      </ul>
+
+      <div class="card-title" style="margin-top: 16px;">Pre-Seeded Privacy Protection List</div>
+      <p style="font-size: 12px; color: var(--color-mocha); margin-bottom: 8px;">Built-in sensitive categories (financial, medical, login portals):</p>
+      <div id="seed-domain-tags" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
+    </div>
+
+    <!-- Section 2: Data Rights & Ownership -->
+    <div class="card danger-zone">
+      <h2 style="font-size: 18px; margin-bottom: 8px; color: var(--color-danger);">User Data Rights & Export</h2>
+      <p style="font-size: 13px; margin-bottom: 16px;">
+        In compliance with privacy standards, you can export all stored activity data as JSON or permanently purge your records.
+      </p>
+
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <button id="export-data-btn" class="btn-pill btn-secondary">Export My Data (JSON)</button>
+        <button id="delete-data-btn" class="btn-pill btn-danger">Delete My Data Permanently</button>
+      </div>
+    </div>
+
+    <!-- Section 3: Consent Management -->
+    <div class="card">
+      <h2 style="font-size: 18px; margin-bottom: 8px;">Consent & Tracking Preferences</h2>
+      <p style="font-size: 13px; margin-bottom: 12px;">Review or revoke tracking permissions.</p>
+      <button id="reopen-consent-btn" class="btn-pill btn-secondary">Re-open Consent Notice</button>
+    </div>
+  </div>
+
+  <script type="module" src="./main.ts"></script>
+</body>
+</html>

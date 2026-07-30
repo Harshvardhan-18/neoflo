@@ -6,8 +6,8 @@ import { captureManager } from './capture';
 
 console.log('[Visual AI Agent] Service Worker initializing...');
 
-// Setup alarms on install and startup
-function initAlarms(): void {
+// Initialize alarms & open consent page on first install
+chrome.runtime.onInstalled.addListener((details) => {
   setupFlushAlarm();
 
   // Setup 30s heartbeat alarm for idle screenshot capture
@@ -16,10 +16,16 @@ function initAlarms(): void {
       chrome.alarms.create('heartbeat_capture_alarm', { periodInMinutes: 0.5 });
     }
   });
-}
 
-chrome.runtime.onInstalled.addListener(initAlarms);
-chrome.runtime.onStartup.addListener(initAlarms);
+  // Open Consent Disclosure tab on fresh installation
+  if (details.reason === 'install') {
+    chrome.tabs.create({ url: chrome.runtime.getURL('src/consent/index.html') });
+  }
+});
+
+chrome.runtime.onStartup.addListener(() => {
+  setupFlushAlarm();
+});
 
 // Alarm listener
 chrome.alarms.onAlarm.addListener((alarm) => {
@@ -38,7 +44,7 @@ async function bufferBackgroundEvent(
 ): Promise<string> {
   const eventId = crypto.randomUUID();
   if (!url || await isDomainBlocked(url)) {
-    return eventId; // Skip if blocked
+    return eventId; // Absolute skip if blocked or unconsented
   }
 
   const domain = extractDomain(url);
@@ -77,7 +83,6 @@ chrome.tabs.onActivated.addListener(async (activeInfo) => {
 chrome.tabs.onUpdated.addListener(async (tabId, changeInfo, tab) => {
   if (changeInfo.status === 'complete' && tab.url) {
     const eventId = await bufferBackgroundEvent('navigation', tab.url, tabId, { title: tab.title });
-    // Trigger visual capture linked to navigation event
     captureManager.enqueueCapture('navigation', tabId, eventId);
   }
 });
