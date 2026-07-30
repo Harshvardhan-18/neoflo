@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "package": "npm run build && powershell -Command \"if (!(Test-Path build)) { New-Item -ItemType Directory build | Out-Null }; Compress-Archive -Path dist/* -DestinationPath build/visual-ai-agent-v1.0.0.zip -Force; Write-Host 'Packaged: build/visual-ai-agent-v1.0.0.zip'\""
   },
   "dependencies": {
     "idb": "^8.0.0"

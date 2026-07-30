@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
 from app.middleware.rate_limit import RateLimitMiddleware
-from app.routers import events, screenshots, activity, privacy, data_rights
+from app.routers import events, screenshots, activity, privacy, data_rights, admin
 
 app = FastAPI(
     title="Visual AI Agent Backend API",
@@ -29,6 +29,7 @@ app.include_router(screenshots.router)
 app.include_router(activity.router)
 app.include_router(privacy.router)
 app.include_router(data_rights.router)
+app.include_router(admin.router)
 
 @app.get("/api/v1/health", tags=["Health Check"])
 async def health_check():
