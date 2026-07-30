@@ -4,7 +4,7 @@ from typing import List
 class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql+asyncpg://postgres:postgrespassword@localhost:5433/visual_ai_agent"
     SYNC_DATABASE_URL: str = "postgresql+psycopg2://postgres:postgrespassword@localhost:5433/visual_ai_agent"
-    ANTHROPIC_API_KEY: str = ""
+    GEMINI_API_KEY: str = ""
     ENVIRONMENT: str = "development"
     LOG_LEVEL: str = "INFO"
     ALLOWED_ORIGINS: str = "chrome-extension://*,http://localhost:3000"

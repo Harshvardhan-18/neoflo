@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
-from app.routers import events
+from app.routers import events, screenshots
 
 app = FastAPI(
     title="Visual AI Agent Backend API",
-    description="Backend service for Chrome extension visual activity logging, vision AI analysis, and privacy controls.",
+    description="Backend service for Chrome extension visual activity logging, Gemini 2.5 Flash vision analysis, and privacy controls.",
     version="1.0.0"
 )
 
@@ -21,6 +21,7 @@ app.add_middleware(
 
 # Register routers
 app.include_router(events.router)
+app.include_router(screenshots.router)
 
 @app.get("/api/v1/health", tags=["Health Check"])
 async def health_check():
