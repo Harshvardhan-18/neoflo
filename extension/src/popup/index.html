@@ -28,7 +28,7 @@
       justify-content: space-between;
       border-bottom: 1px solid rgba(92, 61, 46, 0.15);
       padding-bottom: 12px;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
     .header h1 {
       font-size: 16px;
@@ -58,10 +58,10 @@
       border: 1px solid rgba(92, 61, 46, 0.1);
       border-radius: 12px;
       padding: 14px;
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
     .card-title {
-      font-size: 12px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
       color: var(--color-mocha);
@@ -72,6 +72,11 @@
       font-size: 13px;
       line-height: 1.4;
       margin: 0;
+    }
+    .actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
     .btn-pill {
       display: inline-block;
@@ -90,22 +95,33 @@
     .btn-pill:hover {
       background-color: var(--color-espresso);
     }
+    .btn-secondary {
+      background-color: transparent;
+      border: 1px solid var(--color-mocha);
+      color: var(--color-mocha);
+    }
+    .btn-secondary:hover {
+      background-color: var(--color-latte);
+    }
   </style>
 </head>
 <body>
   <div class="header">
     <h1>Visual AI Agent</h1>
-    <div class="status-badge">
-      <span class="status-dot"></span> Ready
+    <div id="status-badge" class="status-badge">
+      <span class="status-dot"></span> Active
     </div>
   </div>
 
   <div class="card">
-    <p class="card-title">Phase 1 Skeleton</p>
-    <p class="card-body">Extension loaded cleanly with Manifest V3 and background service worker wired.</p>
+    <p class="card-title">Visual Capture Pipeline</p>
+    <p class="card-body">Tracking events & queued compressed screenshots.</p>
   </div>
 
-  <button id="toggle-btn" class="btn-pill">Pause Agent</button>
+  <div class="actions">
+    <button id="capture-now-btn" class="btn-pill">Capture Page Now</button>
+    <button id="toggle-btn" class="btn-pill btn-secondary">Pause Tracking</button>
+  </div>
 
   <script type="module" src="./main.ts"></script>
 </body>

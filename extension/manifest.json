@@ -7,10 +7,13 @@
     "activeTab",
     "storage",
     "scripting",
-    "tabs"
+    "tabs",
+    "alarms"
   ],
   "host_permissions": [
-    "<all_urls>"
+    "<all_urls>",
+    "http://localhost:8000/*",
+    "http://127.0.0.1:8000/*"
   ],
   "action": {
     "default_popup": "src/popup/index.html",
